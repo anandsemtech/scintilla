@@ -3,12 +3,15 @@
  */
 package com.aequalis.serviceimpl;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.aequalis.model.Type;
 import com.aequalis.model.User;
 import com.aequalis.repository.UserRepository;
 import com.aequalis.service.UserService;
@@ -43,5 +46,15 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findByUsername(String username) {
 		return userRepository.findByUsername(username);
+	}
+
+	@Override
+	public List<User> findByType(Type type) {
+		return userRepository.findByType(type);
+	}
+
+	@Override
+	public List<User> findAll() {
+		return userRepository.findAll();
 	}
 }

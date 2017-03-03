@@ -159,7 +159,7 @@ label {
 						<h5>Transfer Now</h5>
 						<div style="padding: 10px">
 							<div class="pull-left">
-								<h6> Account No  :  ${currentUser.bcaddress}</h6>
+								<h6> Account No  :  ${currentUser.bcaddress}</h6> 
 							</div>
 							<div class="pull-right">
 								<h4 style="text-align: right">
@@ -217,6 +217,11 @@ label {
 					<div class="tab-pane  contact" id="3a">
 						<h5>My Profile</h5>
 						<div style="padding: 10px">
+							
+							<div class="pull-right">
+								<img src="${qrcode }" style="height: 150px;">
+							</div>
+						
 							<div class="form-inline">
 								<label for="name">Name</label> : <label for="name"> ${currentUser.fullname }</label> 
 							</div>

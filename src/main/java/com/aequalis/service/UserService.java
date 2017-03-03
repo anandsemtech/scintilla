@@ -3,6 +3,9 @@
  */
 package com.aequalis.service;
 
+import java.util.List;
+
+import com.aequalis.model.Type;
 import com.aequalis.model.User;
 
 /**
@@ -17,4 +20,8 @@ public interface UserService {
 	public User findByUserid(Long userid);
 	
 	public User findByUsername(String username);
+	
+	public List<User> findByType(Type type);
+	
+	public 	List<User> findAll();
 }

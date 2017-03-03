@@ -14,5 +14,7 @@ import com.aequalis.model.Type;
 public interface TypeService {
 	public List<Type> findAllType();
 	
-	Type findByTypeid(Long typeid);
+	public Type findByTypeid(Long typeid);
+	
+	public Type findByName(String name);
 }

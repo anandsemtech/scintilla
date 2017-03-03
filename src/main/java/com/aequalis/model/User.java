@@ -75,6 +75,7 @@ public class User implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date currentLogin;
 	
+	
 	@Transient
 	private String balance;
 
@@ -282,6 +283,6 @@ public class User implements Serializable {
 		return "User [userid=" + userid + ", username=" + username + ", password=" + password + ", fullname=" + fullname
 				+ ", contactnumber=" + contactnumber + ", email=" + email + ", website=" + website + ", address="
 				+ address + ", bcaddress=" + bcaddress + ", unlocked=" + unlocked + ", type=" + type + ", lastLogin="
-				+ lastLogin + ", currentLogin=" + currentLogin + "]";
+				+ lastLogin + ", currentLogin=" + currentLogin + ", balance=" + balance + "]";
 	}
 }

@@ -36,6 +36,11 @@ public class TypeServiceImpl implements TypeService {
 	public Type findByTypeid(Long typeid) {
 		return typeRepository.findByTypeid(typeid);
 	}
+
+	@Override
+	public Type findByName(String name) {
+		return typeRepository.findByName(name);
+	}
 	
 
 }
