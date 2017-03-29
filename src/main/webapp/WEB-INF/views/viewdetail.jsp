@@ -36,8 +36,7 @@
 				<div id="navbar" class="navbar-collapse collapse">
 
 					<ul class="nav navbar-nav pull-right">
-
-						<li class=""><a href="logout">Logout</a></li>
+						 <li class=""><a href="listvendors">Vendors</a></li><li class=""><a href="#">|</a></li><li class=""><a href="listusers">Users</a></li><li class=""><a href="#">|</a></li><li class=""><a href="logout">Logout</a></li>
 					</ul>
 				</div>
 			</div>
@@ -54,7 +53,10 @@
 						<div style="padding: 10px">
 							
 							<div class="pull-right">
-								<img src="${qrcode }" style="height: 200px;">
+								<h4 style="text-align: right">
+									Balance : $${user.balance}
+								</h4>
+								<img src="${qrcode }" style="height: 180px;">
 							</div>
 						
 							<div class="form-inline">
@@ -67,6 +69,10 @@
 							
 							<div class="form-inline">
 								<label for="user_name">Account Type</label> : <label for="name"> ${user.type.name }</label> 
+							</div>
+							
+							<div class="form-inline">
+								<label for="user_name">Linked Vendor</label> : <label for="name"> ${user.vendor.vendorname }</label> 
 							</div>
 							
 							<div class="form-inline">
@@ -86,7 +92,6 @@
 								<label for="address">Address</label> : <label for="name"> ${user.address }</label> 
 							</div>
 							<br>
-							<div class="pull-right"><a href="listusers">Back</a></div>
 							
 						</div>
 					</div>

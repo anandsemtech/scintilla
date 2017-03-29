@@ -67,6 +67,10 @@ public class User implements Serializable {
 	@JoinColumn(name = "typeid")
 	private Type type;
 	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "vendorid")
+	private Vendor vendor;
+	
 	@Column(name="lastlogin")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastLogin;
@@ -275,14 +279,25 @@ public class User implements Serializable {
 		this.type = type;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
+	/**
+	 * @return the vendor
 	 */
+	public Vendor getVendor() {
+		return vendor;
+	}
+
+	/**
+	 * @param vendor the vendor to set
+	 */
+	public void setVendor(Vendor vendor) {
+		this.vendor = vendor;
+	}
+
 	@Override
 	public String toString() {
 		return "User [userid=" + userid + ", username=" + username + ", password=" + password + ", fullname=" + fullname
 				+ ", contactnumber=" + contactnumber + ", email=" + email + ", website=" + website + ", address="
-				+ address + ", bcaddress=" + bcaddress + ", unlocked=" + unlocked + ", type=" + type + ", lastLogin="
-				+ lastLogin + ", currentLogin=" + currentLogin + ", balance=" + balance + "]";
+				+ address + ", bcaddress=" + bcaddress + ", unlocked=" + unlocked + ", type=" + type + ", vendor="
+				+ vendor + ", lastLogin=" + lastLogin + ", currentLogin=" + currentLogin + ", balance=" + balance + "]";
 	}
 }

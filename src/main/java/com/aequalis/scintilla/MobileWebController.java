@@ -94,17 +94,17 @@ public class MobileWebController {
 		User user = userService.loginUser(username, password);
 		if (user != null) {
 			
-			if (user.getUnlocked() == null || !user.getUnlocked()) {
+			/*if (user.getUnlocked() == null || !user.getUnlocked()) {
 				Boolean status = WebAPICall.unlockUser(user.getBcaddress(), password);
 				user.setUnlocked(status);
-			}
+			}*/
 			user.setLastLogin(user.getCurrentLogin());
 			user.setCurrentLogin(loginTime);
 			userService.addUser(user);
 			json.put("result", true);
 			json.put("msg", "Login successful...!");
 			json.put("userid", user.getUserid());
-			json.put("balance", WebAPICall.getBalance(user.getBcaddress()));
+			json.put("balance", WebAPICall.getCustomerBalance(user.getBcaddress()));
 			json.put("bcaddress", user.getBcaddress());
 			json.put("fullname", user.getFullname());
 			json.put("lastlogin", user.getLastLogin());
@@ -127,7 +127,7 @@ public class MobileWebController {
 		transaction.setTransactionamount(amount);
 		transaction.setTransactiondate(new Date());
 		transaction.setTransactiondescription(description);
-		String transactionAddress = WebAPICall.sendCryptoCurrency(user.getBcaddress(), toaddress, amount, user.getPassword());
+		String transactionAddress = WebAPICall.payToStore(user.getBcaddress(), toaddress, amount);
 		if (!transactionAddress.equals("0x123")) {
 			transaction.setTransactionaddress(transactionAddress);
 			transactionService.addTransaction(transaction);

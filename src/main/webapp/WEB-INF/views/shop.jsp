@@ -110,7 +110,7 @@ label {
 							</div>
 							<div class="pull-right">
 								<h4 style="text-align: right">
-									WEI ${currentUser.balance}
+									USD ${currentUser.balance}
 								</h4>
 
 							</div>
@@ -140,7 +140,7 @@ label {
 									<th>#</th>
 									<th>Date</th>
 									<th>Customer Id</th>
-									<th>Amount (WEI)</th>
+									<th>Amount (USD)</th>
 								</tr>
 								<c:set var="count" value="0" scope="page" />
 								<c:forEach items="${myTransactions}" var="transaction">
@@ -163,7 +163,7 @@ label {
 							</div>
 							<div class="pull-right">
 								<h4 style="text-align: right">
-									WEI ${currentUser.balance}
+									USD ${currentUser.balance}
 								</h4>
 
 							</div>
@@ -178,19 +178,17 @@ label {
 												<option>USD</option>
 												<option>CAD</option>
 												<option>INR</option>
-											</select>  --> WEI <input type="text" name="amount" class="form-control" required />
+											</select>  --> USD <input type="text" name="amount" class="form-control" required />
 										</div>
 										<div class="col-md-6">
 											<input type="hidden" name="userid" value="${currentUser.userid }"/>
 											<div class="input-group add-on">
-												<input class="form-control"
-													placeholder="To : Select Beneficinary Name" name="toaddress"
-													id="toaddress" type="text" required>
-												<div class="input-group-btn">
-													<button class="btn btn-contact" type="submit">
-														<i class="fa fa-address-book-o"></i>
-													</button>
-												</div>
+												<select class="form-control" id="storeName" name="storeName" required style="width: 350px;">
+													<option value="" label="---Select Store---"></option>
+													<c:forEach items="${stores}" var="store">
+														<option value="${store.bcaddress}">${store.fullname}</option>
+													</c:forEach>
+												</select>
 											</div>
 											<div class="clearfix">&nbsp;</div>
 											<textarea class="form-control"
@@ -203,7 +201,7 @@ label {
 											<li>1.Daily funds transferlimits-
 												<ul>
 													<li>Minimum amount 1</li>
-													<li>Maximun amount 100000000</li>
+													<li>Maximun amount 100000</li>
 												</ul>
 											</li>
 	
@@ -219,6 +217,9 @@ label {
 						<div style="padding: 10px">
 							
 							<div class="pull-right">
+								<h4 style="text-align: right">
+									Balance : $${currentUser.balance}
+								</h4>
 								<img src="${qrcode }" style="height: 150px;">
 							</div>
 						
@@ -228,12 +229,14 @@ label {
 			
 							<div class="form-inline">
 								<label for="user_name">User Name</label> : <label for="name"> ${currentUser.username }</label> 
-							</div>
+							</div>	
 							
 							<div class="form-inline">
 								<label for="user_name">Account Type</label> : <label for="name"> ${currentUser.type.name }</label> 
 							</div>
-							
+							<div class="form-inline">
+								<label for="user_name">Linked Vendor</label> : <label for="name"> ${currentUser.vendor.vendorname }</label> 
+							</div>
 							<div class="form-inline">
 								<label for="user_name">Public Address</label> : <label for="name"> ${currentUser.bcaddress }</label> 
 							</div>

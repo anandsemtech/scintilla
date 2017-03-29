@@ -21,6 +21,26 @@ function isNumberKey(evt){
         return false;
     return true;
 }    
+
+function showVendorSelection() {
+	var type = $('#userType').val();
+	if (type == 1) {
+		$('#svendorId').show();
+		$('#cvendorId').hide();
+		$('#storeNumberDiv').show();
+		$('#identifierDiv').hide();
+	} else if (type == 2) {
+		$('#svendorId').hide();
+		$('#cvendorId').show();
+		$('#storeNumberDiv').hide();
+		$('#identifierDiv').show();
+	} else {
+		$('#svendorId').hide();
+		$('#cvendorId').hide();
+		$('#storeNumberDiv').hide();
+		$('#identifierDiv').hide();
+	}
+}
 </script>
 </head>
 <body>
@@ -59,40 +79,61 @@ function isNumberKey(evt){
 					<span style="color: #dbde4d;">${registered}</span>
 				</div>
 				<div class="form-inline">
-
-					<label for="select"> Account Type </label> 
-					<select class="form-control" id="userType" name="userType">
+					<label for="select">Account Type </label> 
+					<select class="form-control" id="userType" name="userType" required onchange="showVendorSelection()">
 						<option value="" label="---Select Account Type---"></option>
 						<c:forEach items="${types}" var="type">
 							<option value="${type.typeid}">${type.name}</option>
 						</c:forEach>
 					</select>
 				</div>
-				<div class="form-inline">
-
-					<label for="name"> Name</label> <input type="text"
-						class="form-control" placeholder=" Name" required id="fullName" name="fullName">
+				<div class="form-inline"><label for="name">Name</label> <input type="text"
+						class="form-control" placeholder="Name" required id="fullName" name="fullName">
+				</div>
+				
+				<div class="form-inline" id="identifierDiv" style="display: none;">
+					<label for="identifier">Identifier</label> <input type="text"
+						class="form-control" placeholder="Identifier" id="identifier" name="identifier" >
+				</div>
+				
+				<div class="form-inline" id="storeNumberDiv" style="display: none;">
+					<label for="storeNumber">Store Number</label> <input type="text"
+						class="form-control" placeholder="Store Number" id="storeNumber" name="storeNumber" >
 				</div>
 
 				<div class="form-inline">
-
-					<label for="user_name"> User Name</label> <input type="text"
-						class="form-control" placeholder=" User Name" required id="userName" name="userName" >
+					<label for="user_name">User Name</label> <input type="text"
+						class="form-control" placeholder="User Name" required id="userName" name="userName" >
 				</div>
 				<div class="form-inline">
 
-					<label for="pwd"> Password</label> <input type="password"
-						class="form-control" placeholder=" password" required id="password" name="password">
+					<label for="pwd">Password</label> <input type="password"
+						class="form-control" placeholder="Password" required id="password" name="password">
 				</div>
 				<div class="form-inline">
 
-					<label for="confirm_pwd"> Confirm Password</label> <input
+					<label for="confirm_pwd">Confirm Password</label> <input
 						type="password" class="form-control"
-						placeholder=" Confirm password" required id="confirmPassword" name="confirmPassword">
+						placeholder="Confirm password" required id="confirmPassword" name="confirmPassword">
+				</div>
+				<div class="form-inline">
+					<label for="select">Vendor </label> 
+					<select class="form-control" id="cvendorId" name="cvendorId">
+						<option value="" label="---Select Vendor---"></option>
+						<c:forEach items="${customerVendors}" var="vendor">
+							<option value="${vendor.vendorid}">${vendor.vendorname}</option>
+						</c:forEach>
+					</select>
+					<select class="form-control" id="svendorId" name="svendorId" style="display: none;">
+						<option value="" label="---Select Vendor---"></option>
+						<c:forEach items="${storeVendors}" var="vendor">
+							<option value="${vendor.vendorid}">${vendor.vendorname}</option>
+						</c:forEach>
+					</select>
 				</div>
 				<div class="form-inline">
 					<label for="address">Address</label>
-					<textarea class="form-control" placeholder="address" id="address" name="address"></textarea>
+					<textarea class="form-control" placeholder="Address" id="address" name="address"></textarea>
 				</div>
 				<div class="form-inline">
 					<label for="number">Contact Number</label> <input type="text"
@@ -106,6 +147,10 @@ function isNumberKey(evt){
 				<div class="form-inline">
 					<label for="website">Website</label> <input type="text"
 						class="form-control" placeholder="Website" id="website" name="website" >
+				</div>
+				<div class="form-inline">
+					<label for="balance">Initial Balance</label>
+					<input type="number" min="0" class="form-control" placeholder="Initial Balance" id="initialBalance" name="initialBalance"/>
 				</div>
 				<div style="margin: auto 45%">
 					<button type="submit" class="btn btn-primary">Register</button>

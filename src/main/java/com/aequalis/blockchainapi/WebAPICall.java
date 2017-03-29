@@ -7,14 +7,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
 
 import org.json.JSONObject;
 
@@ -27,7 +22,7 @@ public class WebAPICall {
 	public static String registerNewUser(String passcode) {
 		String bcAddress = "0x123";
 		try {
-			URL url = new URL(WEBAPI.BASE + WEBAPI.REGISTER);
+			URL url = new URL(WEBAPI.REGISTER);
 			HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
 			httpCon.setDoOutput(true);
 			httpCon.setRequestMethod("POST");
@@ -58,7 +53,7 @@ public class WebAPICall {
 		return bcAddress;
 	}
 	
-	public static Boolean unlockUser(String bcAddress, String passcode) {
+	/*public static Boolean unlockUser(String bcAddress, String passcode) {
 		Boolean result = false;
 		try {
 			URL url = new URL(WEBAPI.BASE + WEBAPI.UNLOCK);
@@ -90,26 +85,121 @@ public class WebAPICall {
 			e.printStackTrace();
 		}
 		return result;
-	}
+	}*/
 	
-	private long parseUnsignedHex(String text) {
-        if (text.length() == 16) {
-            return (parseUnsignedHex(text.substring(0, 1)) << 60)
-                    | parseUnsignedHex(text.substring(1));
-        }
-        return Long.parseLong(text, 16);
-    }
-	
-	public static String getBalance(String bcAddress) {
-		String result = "0";
+	public static boolean onBoardVendor(String vendorName, String bcAddress, String description, Integer charge, Integer balance) {
+		boolean result = false;
 		try {
-			URL url = new URL(WEBAPI.BASE + WEBAPI.BALANCE);
+			URL url = new URL(WEBAPI.BASE + WEBAPI.ONBOARDVENDOR);
 			HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
 			httpCon.setDoOutput(true);
 			httpCon.setRequestMethod("POST");
 			httpCon.setRequestProperty("Content-Type","application/json");
 			OutputStreamWriter out = new OutputStreamWriter(httpCon.getOutputStream());
-			String data = WEBAPI.BALANCE_DATA.replace("PARAM1", bcAddress);
+			String data = WEBAPI.ONBOARDVENDOR_DATA.replace("PARAM1", vendorName).replace("PARAM2", bcAddress).replace("PARAM3", description).replace("PARAM4", ""+charge).replace("PARAM5", ""+balance);
+			out.write(data);
+			out.close();
+		  
+			BufferedReader br;
+			if (200 <= httpCon.getResponseCode() && httpCon.getResponseCode() <= 299) {
+				br = new BufferedReader(new InputStreamReader((httpCon.getInputStream())));
+				StringBuilder sb = new StringBuilder();
+				String output;
+				while ((output = br.readLine()) != null) {
+					sb.append(output);
+				}
+				
+				result = true;
+				
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	public static boolean onBoardCustomer(String name, String bcAddress, String description, String identifier, Integer balance) {
+		boolean result = false;
+		try {
+			URL url = new URL(WEBAPI.BASE + WEBAPI.ONBOARDCUSTOMER);
+			HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+			httpCon.setDoOutput(true);
+			httpCon.setRequestMethod("POST");
+			httpCon.setRequestProperty("Content-Type","application/json");
+			OutputStreamWriter out = new OutputStreamWriter(httpCon.getOutputStream());
+			String data = WEBAPI.ONBOARDCUSTOMER_DATA.replace("PARAM1", name).replace("PARAM2", bcAddress).replace("PARAM3", description).replace("PARAM4", identifier).replace("PARAM5", ""+balance);
+			out.write(data);
+			out.close();
+		  
+			BufferedReader br;
+			if (200 <= httpCon.getResponseCode() && httpCon.getResponseCode() <= 299) {
+				br = new BufferedReader(new InputStreamReader((httpCon.getInputStream())));
+				StringBuilder sb = new StringBuilder();
+				String output;
+				while ((output = br.readLine()) != null) {
+					sb.append(output);
+				}
+				
+				result = true;
+				
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	public static boolean onBoardStore(String name, String bcAddress, String description, String storeNumber, Integer balance) {
+		boolean result = false;
+		try {
+			URL url = new URL(WEBAPI.BASE + WEBAPI.ONBOARDSTORE);
+			HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+			httpCon.setDoOutput(true);
+			httpCon.setRequestMethod("POST");
+			httpCon.setRequestProperty("Content-Type","application/json");
+			OutputStreamWriter out = new OutputStreamWriter(httpCon.getOutputStream());
+			String data = WEBAPI.ONBOARDSTORE_DATA.replace("PARAM1", name).replace("PARAM2", bcAddress).replace("PARAM3", description).replace("PARAM4", storeNumber).replace("PARAM5", ""+balance);
+			out.write(data);
+			out.close();
+		  
+			BufferedReader br;
+			if (200 <= httpCon.getResponseCode() && httpCon.getResponseCode() <= 299) {
+				br = new BufferedReader(new InputStreamReader((httpCon.getInputStream())));
+				StringBuilder sb = new StringBuilder();
+				String output;
+				while ((output = br.readLine()) != null) {
+					sb.append(output);
+				}
+				
+				result = true;
+				
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	
+	public static Integer getCustomerBalance(String bcAddress) {
+		Integer result = 0;
+		try {
+			URL url = new URL(WEBAPI.BASE + WEBAPI.CUSTOMERBALANCE);
+			HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+			httpCon.setDoOutput(true);
+			httpCon.setRequestMethod("POST");
+			httpCon.setRequestProperty("Content-Type","application/json");
+			OutputStreamWriter out = new OutputStreamWriter(httpCon.getOutputStream());
+			String data = WEBAPI.CUSTOMERBALANCE_DATA.replace("PARAM1", bcAddress);
 			out.write(data);
 			out.close();
 		  
@@ -123,18 +213,8 @@ public class WebAPICall {
 				}
 				
 				JSONObject json = new JSONObject(sb.toString());
-				if (json.has("result")) {
-					String balance = json.getString("result");
-					if (balance != null && !balance.equals("0x0")) {
-						balance = balance.substring(2);
-				        
-						/*long weiValue = new BigInteger(balance, 16).longValue();
-						Double ethValue = weiValue / 1000000000000000000D;
-						DecimalFormat formatter = new DecimalFormat("#.#######", DecimalFormatSymbols.getInstance( Locale.ENGLISH ));
-						formatter.setRoundingMode( RoundingMode.DOWN );
-						result = formatter.format(ethValue);*/
-						result = balance;
-					}
+				if (json.has("Balance")) {
+					result = json.getInt("Balance");
 				}
 				
 			}
@@ -146,16 +226,52 @@ public class WebAPICall {
 		return result;
 	}
 	
-	public static String sendCryptoCurrency(String from, String to, String value, String passcode) {
-		String transactionAddress = "0x123";
+	public static Integer getStoreBalance(String bcAddress) {
+		Integer result = 0;
 		try {
-			URL url = new URL(WEBAPI.BASE + WEBAPI.SENDAMOUNT);
+			URL url = new URL(WEBAPI.BASE + WEBAPI.STOREBALANCE);
 			HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
 			httpCon.setDoOutput(true);
 			httpCon.setRequestMethod("POST");
 			httpCon.setRequestProperty("Content-Type","application/json");
 			OutputStreamWriter out = new OutputStreamWriter(httpCon.getOutputStream());
-			String data = WEBAPI.SENDAMOUNT_DATA.replace("PARAM1", from).replace("PARAM2", to).replace("PARAM3", value /*Long.toHexString(Long.parseLong(value))*/).replace("PARAM4", passcode);
+			String data = WEBAPI.STOREBALANCE_DATA.replace("PARAM1", bcAddress);
+			out.write(data);
+			out.close();
+		  
+			BufferedReader br;
+			if (200 <= httpCon.getResponseCode() && httpCon.getResponseCode() <= 299) {
+				br = new BufferedReader(new InputStreamReader((httpCon.getInputStream())));
+				StringBuilder sb = new StringBuilder();
+				String output;
+				while ((output = br.readLine()) != null) {
+					sb.append(output);
+				}
+				result = Integer.parseInt(sb.toString());
+				/*JSONObject json = new JSONObject(sb.toString());
+				if (json.has("Balance")) {
+					result = json.getInt("Balance");
+				}*/
+				
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public static Integer getVendorBalance(String bcAddress) {
+		Integer result = 0;
+		try {
+			URL url = new URL(WEBAPI.BASE + WEBAPI.VENDORBALANCE);
+			HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+			httpCon.setDoOutput(true);
+			httpCon.setRequestMethod("POST");
+			httpCon.setRequestProperty("Content-Type","application/json");
+			OutputStreamWriter out = new OutputStreamWriter(httpCon.getOutputStream());
+			String data = WEBAPI.VENDORBALANCE_DATA.replace("PARAM1", bcAddress);
 			out.write(data);
 			out.close();
 		  
@@ -169,8 +285,45 @@ public class WebAPICall {
 				}
 				
 				JSONObject json = new JSONObject(sb.toString());
+				if (json.has("Balance")) {
+					result = json.getInt("Balance");
+				}
+				
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public static String payToStore(String from, String to, String value) {
+		String transactionAddress = "0x123";
+		try {
+			URL url = new URL(WEBAPI.BASE + WEBAPI.PAYSTORE);
+			HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+			httpCon.setDoOutput(true);
+			httpCon.setRequestMethod("POST");
+			httpCon.setRequestProperty("Content-Type","application/json");
+			OutputStreamWriter out = new OutputStreamWriter(httpCon.getOutputStream());
+			String data = WEBAPI.PAYSTORE_DATA.replace("PARAM1", from).replace("PARAM2", to).replace("PARAM3", value);
+			out.write(data);
+			out.close();
+		  
+			BufferedReader br;
+			if (200 <= httpCon.getResponseCode() && httpCon.getResponseCode() <= 299) {
+				br = new BufferedReader(new InputStreamReader((httpCon.getInputStream())));
+				StringBuilder sb = new StringBuilder();
+				String output;
+				while ((output = br.readLine()) != null) {
+					sb.append(output);
+				}
+				transactionAddress = sb.toString();
+				/*JSONObject json = new JSONObject(sb.toString());
 				if (json.has("result"))
 					transactionAddress = json.getString("result");
+				*/
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();

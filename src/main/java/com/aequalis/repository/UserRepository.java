@@ -9,6 +9,7 @@ import com.aequalis.model.User;
 import java.lang.String;
 import com.aequalis.model.Type;
 import java.util.List;
+import com.aequalis.model.Vendor;
 
 /**
  * @author leoanbarasanm
@@ -24,5 +25,5 @@ public interface UserRepository extends JpaRepository<User, Long>  {
 	
 	List<User> findByType(Type type);
 	
-
+	List<User> findByVendor(Vendor vendor);
 }

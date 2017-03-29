@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.aequalis.model.Type;
 import com.aequalis.model.User;
+import com.aequalis.model.Vendor;
 import com.aequalis.repository.UserRepository;
 import com.aequalis.service.UserService;
 
@@ -56,5 +57,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> findAll() {
 		return userRepository.findAll();
+	}
+
+	@Override
+	public List<User> findByVendor(Vendor vendor) {
+		return userRepository.findByVendor(vendor);
 	}
 }

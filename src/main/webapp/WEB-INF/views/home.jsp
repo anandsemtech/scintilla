@@ -34,7 +34,7 @@
 
 					<ul class="nav navbar-nav pull-right">
 
-						<li class=""><a href="login">Login</a></li> <li class=""><a href="#">|</a></li> <li class=""><a href="listusers">Admin</a></li>
+						<li class=""><a href="login">Login</a></li> <li class=""><a href="#">|</a></li> <li class=""><a href="listvendors">Admin</a></li>
 					</ul>
 				</div>
 			</div>
