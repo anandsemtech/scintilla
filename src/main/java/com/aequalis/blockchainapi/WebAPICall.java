@@ -189,9 +189,42 @@ public class WebAPICall {
 		return result;
 	}
 	
+	public static boolean associateVendor(String bcAddress, String vendorBcAddress) {
+		boolean result = false;
+		try {
+			URL url = new URL(WEBAPI.BASE + WEBAPI.ASSOCIATEVENDOR);
+			HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+			httpCon.setDoOutput(true);
+			httpCon.setRequestMethod("POST");
+			httpCon.setRequestProperty("Content-Type","application/json");
+			OutputStreamWriter out = new OutputStreamWriter(httpCon.getOutputStream());
+			String data = WEBAPI.ASSOCIATEVENDOR_DATA.replace("PARAM1", vendorBcAddress).replace("PARAM2", bcAddress);
+			out.write(data);
+			out.close();
+		  
+			BufferedReader br;
+			if (200 <= httpCon.getResponseCode() && httpCon.getResponseCode() <= 299) {
+				br = new BufferedReader(new InputStreamReader((httpCon.getInputStream())));
+				StringBuilder sb = new StringBuilder();
+				String output;
+				while ((output = br.readLine()) != null) {
+					sb.append(output);
+				}
+				
+				result = true;
+				
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 	
-	public static Integer getCustomerBalance(String bcAddress) {
-		Integer result = 0;
+	public static Double getCustomerBalance(String bcAddress) {
+		Double result = 0.0;
 		try {
 			URL url = new URL(WEBAPI.BASE + WEBAPI.CUSTOMERBALANCE);
 			HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
@@ -214,7 +247,7 @@ public class WebAPICall {
 				
 				JSONObject json = new JSONObject(sb.toString());
 				if (json.has("Balance")) {
-					result = json.getInt("Balance");
+					result = json.getDouble("Balance");
 				}
 				
 			}
@@ -226,8 +259,8 @@ public class WebAPICall {
 		return result;
 	}
 	
-	public static Integer getStoreBalance(String bcAddress) {
-		Integer result = 0;
+	public static Double getStoreBalance(String bcAddress) {
+		Double result = 0.0;
 		try {
 			URL url = new URL(WEBAPI.BASE + WEBAPI.STOREBALANCE);
 			HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
@@ -247,7 +280,7 @@ public class WebAPICall {
 				while ((output = br.readLine()) != null) {
 					sb.append(output);
 				}
-				result = Integer.parseInt(sb.toString());
+				result = Double.parseDouble(sb.toString());
 				/*JSONObject json = new JSONObject(sb.toString());
 				if (json.has("Balance")) {
 					result = json.getInt("Balance");
@@ -262,8 +295,8 @@ public class WebAPICall {
 		return result;
 	}
 	
-	public static Integer getVendorBalance(String bcAddress) {
-		Integer result = 0;
+	public static Double getVendorBalance(String bcAddress) {
+		Double result = 0.0;
 		try {
 			URL url = new URL(WEBAPI.BASE + WEBAPI.VENDORBALANCE);
 			HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
@@ -286,7 +319,7 @@ public class WebAPICall {
 				
 				JSONObject json = new JSONObject(sb.toString());
 				if (json.has("Balance")) {
-					result = json.getInt("Balance");
+					result = json.getDouble("Balance");
 				}
 				
 			}

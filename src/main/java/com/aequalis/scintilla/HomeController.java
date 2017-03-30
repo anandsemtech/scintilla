@@ -311,6 +311,7 @@ public class HomeController {
 			}
 			
 			if (result) {
+				WebAPICall.associateVendor(bcAddress, user.getVendor().getBcaddress());
 				userService.addUser(user);
 				
 				byte[] qrCode = QRCodeProcessor.generateQRCode(bcAddress);
@@ -388,12 +389,15 @@ public class HomeController {
 			User user = userService.findByUserid(Long.parseLong(userId.toString()));
 			if (user.getType().getName().equals("Customer")) {
 				user.setBalance("" + WebAPICall.getCustomerBalance(user.getBcaddress()));
+				List<Transaction> transactions = transactionService.findByUser(user);
+				model.addAttribute("myTransactions", transactions);
 			} else if (user.getType().getName().equals("Store")) {
 				user.setBalance("" + WebAPICall.getStoreBalance(user.getBcaddress()));
+				List<Transaction> transactions = transactionService.findByCutomeraddress(user.getBcaddress());
+				model.addAttribute("myTransactions", transactions);
 			}
 			
-			List<Transaction> transactions = transactionService.findByUser(user);
-			model.addAttribute("myTransactions", transactions);
+			
 			model.addAttribute("currentUser", user);
 			
 			List<User> stores = userService.findByType(typeService.findByName("Store"));

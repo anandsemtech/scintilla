@@ -16,4 +16,6 @@ public interface TransactionService {
 	public void addTransaction(Transaction transaction);
 	
 	public List<Transaction> findByUser(User user);
+	
+	public List<Transaction> findByCutomeraddress(String cutomeraddress);
 }

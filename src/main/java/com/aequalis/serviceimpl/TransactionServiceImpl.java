@@ -37,5 +37,10 @@ public class TransactionServiceImpl implements TransactionService {
 	public List<Transaction> findByUser(User user) {
 		return transactionRepository.findByUser(user);
 	}
+
+	@Override
+	public List<Transaction> findByCutomeraddress(String cutomeraddress) {
+		return transactionRepository.findByCutomeraddress(cutomeraddress);
+	}
 	
 }

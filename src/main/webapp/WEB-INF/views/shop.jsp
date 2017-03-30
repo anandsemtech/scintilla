@@ -139,8 +139,15 @@ label {
 								<tr class="success">
 									<th>#</th>
 									<th>Date</th>
-									<th>Customer Id</th>
-									<th>Amount (USD)</th>
+									<c:if test="${currentUser.type.typeid == 2}">
+										<th>Vendor Address</th>
+										<th>Debited Amount</th>
+									</c:if>
+									<c:if test="${currentUser.type.typeid == 1}">
+										<th>Customer Address</th>
+										<th>Credited Amount</th>
+									</c:if>
+									
 								</tr>
 								<c:set var="count" value="0" scope="page" />
 								<c:forEach items="${myTransactions}" var="transaction">
@@ -148,7 +155,12 @@ label {
 									<tr>
 										<td>${count}</td>
 										<td>${transaction.transactiondate}</td>
-										<td>${transaction.cutomeraddress}</td>
+										<c:if test="${currentUser.type.typeid == 2}">
+											<td>${transaction.cutomeraddress}</td>
+										</c:if>
+										<c:if test="${currentUser.type.typeid == 1}">
+											<td>${transaction.user.bcaddress}</td>
+										</c:if>
 										<td>${transaction.transactionamount}</td>
 									</tr>
 								</c:forEach>
