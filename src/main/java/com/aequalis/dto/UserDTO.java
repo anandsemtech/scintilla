@@ -12,11 +12,15 @@ public class UserDTO {
 	private String username;
 	private String password;
 	private String fullname;
+	private String identifier;
+	private String initialBalance;
 	private String contactnumber;
 	private String email;
 	private String website;
 	private String address;
 	private String type;
+	private String vendor;
+	
 	/**
 	 * @return the username
 	 */
@@ -112,6 +116,42 @@ public class UserDTO {
 	 */
 	public void setType(String type) {
 		this.type = type;
+	}
+	/**
+	 * @return the identifier
+	 */
+	public String getIdentifier() {
+		return identifier;
+	}
+	/**
+	 * @param identifier the identifier to set
+	 */
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
+	/**
+	 * @return the initialBalance
+	 */
+	public String getInitialBalance() {
+		return initialBalance;
+	}
+	/**
+	 * @param initialBalance the initialBalance to set
+	 */
+	public void setInitialBalance(String initialBalance) {
+		this.initialBalance = initialBalance;
+	}
+	/**
+	 * @return the vendor
+	 */
+	public String getVendor() {
+		return vendor;
+	}
+	/**
+	 * @param vendor the vendor to set
+	 */
+	public void setVendor(String vendor) {
+		this.vendor = vendor;
 	}
 	
 }

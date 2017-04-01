@@ -23,10 +23,12 @@ import com.aequalis.model.QRCode;
 import com.aequalis.model.Transaction;
 import com.aequalis.model.Type;
 import com.aequalis.model.User;
+import com.aequalis.model.Vendor;
 import com.aequalis.service.QRCodeService;
 import com.aequalis.service.TransactionService;
 import com.aequalis.service.TypeService;
 import com.aequalis.service.UserService;
+import com.aequalis.service.VendorService;
 
 /**
  * @author leoanbarasanm
@@ -38,6 +40,9 @@ public class MobileWebController {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	VendorService vendorService;
 	
 	@Autowired
 	TypeService typeService;
@@ -70,16 +75,28 @@ public class MobileWebController {
 			newUser.setType(type);
 			String bcAddress = WebAPICall.registerNewUser(user.getPassword());
 			newUser.setBcaddress(bcAddress);
-			userService.addUser(newUser);
 			
-			byte[] qrCode = QRCodeProcessor.generateQRCode(bcAddress);
-			QRCode code = new QRCode();
-			code.setUser(userService.findByUsername(user.getUsername()));
-			code.setCode(qrCode);
-			qrCodeService.addQRCode(code);
+			boolean result = false;
+			Vendor vendor = vendorService.findByVendorid(Long.parseLong(user.getVendor()));
+			newUser.setVendor(vendor);
+			result = WebAPICall.onBoardCustomer(user.getUsername(), bcAddress, user.getFullname(), user.getIdentifier(), Integer.parseInt(user.getInitialBalance()));
 			
-			json.put("result", true);
-			json.put("msg", "You have successfully registered...!");
+			if (result) {
+				WebAPICall.associateVendor(bcAddress, newUser.getVendor().getBcaddress());
+				userService.addUser(newUser);
+				
+				byte[] qrCode = QRCodeProcessor.generateQRCode(bcAddress);
+				QRCode code = new QRCode();
+				code.setUser(userService.findByUsername(user.getUsername()));
+				code.setCode(qrCode);
+				qrCodeService.addQRCode(code);
+				
+				json.put("result", true);
+				json.put("msg", "You have successfully registered...!");
+			} else {
+				json.put("result", false);
+				json.put("msg", "Issue in on-board user, Please try again!");
+			}
 		} else {
 			json.put("result", false);
 			json.put("msg", "Username is not available, Please try again!");
@@ -143,6 +160,54 @@ public class MobileWebController {
 		return json.toString();
 	}
 	
+	@RequestMapping(value = "common/getcustomervendors", method = RequestMethod.GET)
+	public String getCustomerVendors() {
+		JSONObject jsonObject = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		
+		List<Vendor> vendors = vendorService.findByType(typeService.findByName("Customer"));
+		for (Vendor vendor : vendors) {
+			JSONObject object = new JSONObject();
+			object.put("id", vendor.getVendorid());
+			object.put("vendorname", vendor.getVendorname());
+			jsonArray.put(object);
+		}
+		
+		if (jsonArray.length() > 0) {
+			jsonObject.put("result", true);
+			jsonObject.put("vendros", jsonArray);
+		} else {
+			jsonObject.put("result", false);
+			jsonObject.put("msg", "No vendors...!");
+		}
+		
+		return jsonObject.toString();
+	}
+	
+	@RequestMapping(value = "common/getstores", method = RequestMethod.GET)
+	public String getStores() {
+		JSONObject jsonObject = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		
+		List<User> stores = userService.findByType(typeService.findByName("Store"));
+		for (User store : stores) {
+			JSONObject object = new JSONObject();
+			object.put("bcaddress", store.getBcaddress());
+			object.put("name", store.getFullname());
+			jsonArray.put(object);
+		}
+		
+		if (jsonArray.length() > 0) {
+			jsonObject.put("result", true);
+			jsonObject.put("stores", jsonArray);
+		} else {
+			jsonObject.put("result", false);
+			jsonObject.put("msg", "No stores...!");
+		}
+		
+		return jsonObject.toString();
+	}
+	
 	@RequestMapping(value = "user/mytransactions", method = RequestMethod.GET)
 	public String login(@RequestParam("userid") Long userid) {
 		JSONObject jsonObject = new JSONObject();
@@ -153,7 +218,7 @@ public class MobileWebController {
 			JSONObject transactionObject = new JSONObject();
 			transactionObject.put("id", transaction.getTransactionid());
 			transactionObject.put("date", transaction.getTransactiondate());
-			transactionObject.put("cutomeraddress", transaction.getCutomeraddress());
+			transactionObject.put("storeaddress", transaction.getCutomeraddress());
 			transactionObject.put("amount", transaction.getTransactionamount());
 			transactionObject.put("description", transaction.getTransactiondescription());
 			jsonArray.put(transactionObject);
