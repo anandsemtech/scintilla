@@ -142,7 +142,6 @@ public class WebAPICall {
 				while ((output = br.readLine()) != null) {
 					sb.append(output);
 				}
-				
 				result = true;
 				
 			}

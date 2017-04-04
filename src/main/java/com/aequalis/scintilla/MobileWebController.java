@@ -138,23 +138,30 @@ public class MobileWebController {
 		JSONObject json = new JSONObject();
 		
 		User user = userService.findByUserid(userid);
-		Transaction transaction = new Transaction();
-		transaction.setUser(user);
-		transaction.setCutomeraddress(toaddress);
-		transaction.setTransactionamount(amount);
-		transaction.setTransactiondate(new Date());
-		transaction.setTransactiondescription(description);
-		String transactionAddress = WebAPICall.payToStore(user.getBcaddress(), toaddress, amount);
-		if (!transactionAddress.equals("0x123")) {
-			transaction.setTransactionaddress(transactionAddress);
-			transactionService.addTransaction(transaction);
-			
-			json.put("result", true);
-			json.put("msg", "Transaction successful...!");
+		if (user != null) {
+			Transaction transaction = new Transaction();
+			transaction.setUser(user);
+			transaction.setCutomeraddress(toaddress);
+			transaction.setTransactionamount(amount);
+			transaction.setTransactiondate(new Date());
+			transaction.setTransactiondescription(description);
+			String transactionAddress = WebAPICall.payToStore(user.getBcaddress(), toaddress, amount);
+			if (!transactionAddress.equals("0x123")) {
+				transaction.setTransactionaddress(transactionAddress);
+				transactionService.addTransaction(transaction);
+				
+				json.put("result", true);
+				json.put("msg", "Transaction successful...!");
+				json.put("balance", WebAPICall.getCustomerBalance(user.getBcaddress()));
+			} else {
+				json.put("result", false);
+				json.put("msg", "Transaction failed, Please try again...!");
+			}
 		} else {
 			json.put("result", false);
-			json.put("msg", "Transaction failed, Please try again...!");
+			json.put("msg", "User is not found!");
 		}
+		
 		
 		
 		return json.toString();
@@ -208,29 +215,47 @@ public class MobileWebController {
 		return jsonObject.toString();
 	}
 	
+	@RequestMapping(value = "user/mybalance", method = RequestMethod.GET)
+	public String getBalance(@RequestParam("userid") Long userid) {
+		JSONObject jsonObject = new JSONObject();
+		User user = userService.findByUserid(userid);
+		if (user != null) {
+			jsonObject.put("result", true);
+			jsonObject.put("balance", WebAPICall.getCustomerBalance(user.getBcaddress()));
+		} else {
+			jsonObject.put("result", false);
+			jsonObject.put("msg", "User is not found!");
+		}
+		return jsonObject.toString();
+	}
+	
 	@RequestMapping(value = "user/mytransactions", method = RequestMethod.GET)
 	public String login(@RequestParam("userid") Long userid) {
 		JSONObject jsonObject = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		User user = userService.findByUserid(userid);
-		List<Transaction> transactions = transactionService.findByUser(user);
-		for (Transaction transaction : transactions) {
-			JSONObject transactionObject = new JSONObject();
-			transactionObject.put("id", transaction.getTransactionid());
-			transactionObject.put("date", transaction.getTransactiondate());
-			transactionObject.put("storeaddress", transaction.getCutomeraddress());
-			transactionObject.put("amount", transaction.getTransactionamount());
-			transactionObject.put("description", transaction.getTransactiondescription());
-			jsonArray.put(transactionObject);
-		}
-		if (jsonArray.length() > 0) {
-			jsonObject.put("result", true);
-			jsonObject.put("transactions", jsonArray);
+		if (user != null) {
+			List<Transaction> transactions = transactionService.findByUser(user);
+			for (Transaction transaction : transactions) {
+				JSONObject transactionObject = new JSONObject();
+				transactionObject.put("id", transaction.getTransactionid());
+				transactionObject.put("date", transaction.getTransactiondate());
+				transactionObject.put("storeaddress", transaction.getCutomeraddress());
+				transactionObject.put("amount", transaction.getTransactionamount());
+				transactionObject.put("description", transaction.getTransactiondescription());
+				jsonArray.put(transactionObject);
+			}
+			if (jsonArray.length() > 0) {
+				jsonObject.put("result", true);
+				jsonObject.put("transactions", jsonArray);
+			} else {
+				jsonObject.put("result", false);
+				jsonObject.put("msg", "No transactions...!");
+			}
 		} else {
 			jsonObject.put("result", false);
-			jsonObject.put("msg", "No transactions...!");
+			jsonObject.put("msg", "User is not found!");
 		}
-		
 		return jsonObject.toString();
 	}
 	
