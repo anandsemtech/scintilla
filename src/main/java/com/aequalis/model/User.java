@@ -63,6 +63,9 @@ public class User implements Serializable {
 	@Column(name = "unlocked")
 	private Boolean unlocked;
 	
+	@Column(name = "isadminguser")
+	private Boolean isadminuser;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "typeid")
 	private Type type;
@@ -116,6 +119,20 @@ public class User implements Serializable {
 	 */
 	public void setUnlocked(Boolean unlocked) {
 		this.unlocked = unlocked;
+	}
+
+	/**
+	 * @return the isadminuser
+	 */
+	public Boolean getIsadminuser() {
+		return isadminuser;
+	}
+
+	/**
+	 * @param isadminuser the isadminuser to set
+	 */
+	public void setIsadminuser(Boolean isadminuser) {
+		this.isadminuser = isadminuser;
 	}
 
 	/**

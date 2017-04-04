@@ -28,13 +28,13 @@
 							class="icon-bar"></span> <span class="icon-bar"></span> <span
 							class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#">VENDOR TRANSCATION</a>
+					<a class="navbar-brand" href="#">Scintilla</a>
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 
 					<ul class="nav navbar-nav pull-right">
 
-						<li class=""><a href="login">Login</a></li> <li class=""><a href="#">|</a></li> <li class=""><a href="listvendors">Admin</a></li>
+						<li class=""><a href="login">Login</a></li> <!-- <li class=""><a href="#">|</a></li> <li class=""><a href="listvendors">Admin</a></li> -->
 					</ul>
 				</div>
 			</div>
