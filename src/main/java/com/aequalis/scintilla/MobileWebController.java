@@ -106,18 +106,16 @@ public class MobileWebController {
 	
 	@RequestMapping(value = "user/login", method = RequestMethod.POST)
 	public String login(@RequestParam("username") String username, @RequestParam("password") String password) {
-		JSONObject json = new JSONObject();
 		Date loginTime = new Date();
+		JSONObject json = new JSONObject();
 		User user = userService.loginUser(username, password);
-		if (user != null) {
+		if (user != null && user.getType() != null && user.getType().getName().equals("Customer")) {
 			
 			/*if (user.getUnlocked() == null || !user.getUnlocked()) {
 				Boolean status = WebAPICall.unlockUser(user.getBcaddress(), password);
 				user.setUnlocked(status);
 			}*/
-			user.setLastLogin(user.getCurrentLogin());
-			user.setCurrentLogin(loginTime);
-			userService.addUser(user);
+			
 			json.put("result", true);
 			json.put("msg", "Login successful...!");
 			json.put("userid", user.getUserid());
@@ -125,12 +123,40 @@ public class MobileWebController {
 			json.put("bcaddress", user.getBcaddress());
 			json.put("fullname", user.getFullname());
 			json.put("lastlogin", user.getLastLogin());
+			
+			user.setLastLogin(user.getCurrentLogin());
+			user.setCurrentLogin(loginTime);
+			userService.addUser(user);
 		} else {
 			json.put("result", false);
 			json.put("msg", "Invalid user name or password. Please try again.");
 		}
 		
 		return json.toString();
+	}
+	
+	@RequestMapping(value = "user/myprofile", method = RequestMethod.GET)
+	public String getMyProfile(@RequestParam("userid") Long userid) {
+		JSONObject jsonObject = new JSONObject();
+		User user = userService.findByUserid(userid);
+		if (user != null) {
+			jsonObject.put("result", true);
+			jsonObject.put("fullname", user.getFullname());
+			jsonObject.put("username", user.getUsername());
+			jsonObject.put("bcaddress", user.getBcaddress());
+			jsonObject.put("accounttype", user.getType().getName());
+			jsonObject.put("linkedvendor", user.getVendor().getVendorname());
+			jsonObject.put("contactnumber", user.getContactnumber());
+			jsonObject.put("email", user.getEmail());
+			jsonObject.put("website", user.getWebsite());
+			jsonObject.put("address", user.getAddress());
+			jsonObject.put("lastlogin", user.getLastLogin());
+			jsonObject.put("balance", WebAPICall.getCustomerBalance(user.getBcaddress()));
+		} else {
+			jsonObject.put("result", false);
+			jsonObject.put("msg", "User is not found!");
+		}
+		return jsonObject.toString();
 	}
 	
 	@RequestMapping(value = "user/sendcurrency", method = RequestMethod.POST)
